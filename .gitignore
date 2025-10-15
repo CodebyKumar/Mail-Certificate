@@ -9,3 +9,8 @@ wheels/
 # Virtual environments
 .venv
 .env
+
+
+template/
+certificates_png/
+certificates_pdf/
