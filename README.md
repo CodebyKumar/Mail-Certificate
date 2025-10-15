@@ -17,7 +17,7 @@ A Python-based tool to automatically generate personalized certificates from an 
 - Python 3.13 or higher
 - Gmail account with App Password (for email sending)
 - Excel file with participant data (Name and Email columns)
-- Certificate template image (JPG format)
+- Certificate template image (PNG format)
 
 ## Installation
 
@@ -39,7 +39,7 @@ A Python-based tool to automatically generate personalized certificates from an 
    - `Name`: Participant's full name
    - `Email`: Participant's email address
 
-3. **Certificate Template**: Place your template image (`certificate_template.jpg`) in the `template/` directory
+3. **Certificate Template**: Place your template image (`certificate_template.png`) in the `template/` directory
 
 ## Usage
 
@@ -89,7 +89,7 @@ Certificate_Gen/
 ├── participants/           # Participant data directory
 │   └── participants.xlsx   # Excel file with participant list
 ├── template/               # Template directory
-│   └── certificate_template.jpg  # Certificate template image
+│   └── certificate_template.png  # Certificate template image
 ├── certificates_png/       # Generated PNG certificates
 ├── certificates_pdf/       # Generated PDF certificates
 └── fonts/                  # Downloaded Google Fonts
@@ -105,7 +105,7 @@ Certificate_Gen/
 
 - **Font Issues**: The script falls back to system fonts if Google Fonts can't be downloaded
 - **Email Errors**: Verify your Gmail credentials and App Password
-- **Template Not Found**: Ensure the template image is in JPG format in the `template/` directory
+- **Template Not Found**: Ensure the template image is in PNG format in the `template/` directory
 - **Excel Errors**: Check that your Excel file has 'Name' and 'Email' columns
 
 ## License

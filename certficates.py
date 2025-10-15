@@ -15,7 +15,7 @@ import io
 
 load_dotenv()
 EXCEL_FILE = "Certificate_Gen/participants.xlsx"
-TEMPLATE_FILE = "Certificate_Gen/certificate_template.jpg"
+TEMPLATE_FILE = "Certificate_Gen/certificate_template.png"
 OUTPUT_DIR_PNG = "Certificate_Gen/certificates_png"
 OUTPUT_DIR_PDF = "Certificate_Gen/certificates_pdf"
 
