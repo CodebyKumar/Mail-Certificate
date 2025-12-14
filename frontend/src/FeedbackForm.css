@@ -1,0 +1,253 @@
+/* Feedback Form Page Styles */
+.feedback-page {
+  min-height: 100vh;
+  background: var(--bg-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}
+
+.feedback-loading,
+.feedback-error,
+.feedback-success {
+  text-align: center;
+  color: var(--text-secondary);
+}
+
+.feedback-loading .spinner {
+  color: var(--accent-primary);
+  animation: spin 1s linear infinite;
+  margin-bottom: 1rem;
+}
+
+.feedback-error {
+  max-width: 400px;
+}
+
+.feedback-error svg {
+  color: var(--text-secondary);
+  opacity: 0.5;
+  margin-bottom: 1rem;
+}
+
+.feedback-error h2 {
+  color: var(--text-primary);
+  margin-bottom: 0.5rem;
+}
+
+.feedback-success {
+  max-width: 500px;
+}
+
+.feedback-success .success-icon {
+  color: var(--success);
+  margin-bottom: 1rem;
+}
+
+.feedback-success h1 {
+  color: var(--text-primary);
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+}
+
+.feedback-success .certificate-note {
+  margin-top: 1.5rem;
+  padding: 1rem;
+  background: var(--bg-secondary);
+  border: 1px solid var(--panel-border);
+  border-radius: 8px;
+  font-size: 0.9rem;
+}
+
+.feedback-container {
+  width: 100%;
+  max-width: 600px;
+  background: var(--panel-bg);
+  border: 2px solid var(--panel-border);
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.feedback-header {
+  background: var(--bg-secondary);
+  padding: 2rem;
+  text-align: center;
+  border-bottom: 2px solid var(--accent-primary);
+}
+
+.feedback-logo {
+  color: var(--accent-primary);
+  margin-bottom: 1rem;
+}
+
+.feedback-header h1 {
+  color: var(--text-primary);
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.feedback-greeting {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+}
+
+.feedback-greeting strong {
+  color: var(--accent-primary);
+}
+
+.feedback-form {
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.feedback-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.feedback-label {
+  font-size: 1rem;
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+.question-num {
+  color: var(--accent-primary);
+  font-weight: 700;
+  margin-right: 0.5rem;
+}
+
+.required {
+  color: var(--error);
+  margin-left: 0.25rem;
+}
+
+.feedback-textarea {
+  width: 100%;
+  padding: 0.875rem;
+  background: var(--bg-secondary);
+  border: 2px solid var(--panel-border);
+  border-radius: 8px;
+  color: var(--text-primary);
+  font-family: inherit;
+  font-size: 0.95rem;
+  resize: vertical;
+  transition: border-color 0.2s ease;
+}
+
+.feedback-textarea:focus {
+  outline: none;
+  border-color: var(--accent-primary);
+}
+
+.rating-input {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.rating-star {
+  background: transparent;
+  border: none;
+  color: var(--text-light);
+  cursor: pointer;
+  padding: 0.25rem;
+  transition: all 0.2s ease;
+}
+
+.rating-star:hover,
+.rating-star.active {
+  color: var(--warning);
+  transform: scale(1.1);
+}
+
+.choice-input {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.choice-option {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  background: var(--bg-secondary);
+  border: 2px solid var(--panel-border);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.choice-option:hover {
+  border-color: var(--accent-primary);
+}
+
+.choice-option input[type="radio"] {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--accent-primary);
+}
+
+.choice-option span {
+  color: var(--text-primary);
+  font-size: 0.95rem;
+}
+
+.submit-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 1rem 2rem;
+  margin-top: 1rem;
+  background: var(--accent-primary);
+  color: var(--text-inverse);
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.submit-btn:hover:not(:disabled) {
+  background: var(--accent-secondary);
+  box-shadow: 0 0 20px rgba(230, 126, 34, 0.4);
+}
+
+.submit-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.submit-btn .spinner {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@media (max-width: 640px) {
+  .feedback-page {
+    padding: 1rem;
+  }
+
+  .feedback-container {
+    border-radius: 12px;
+  }
+
+  .feedback-header,
+  .feedback-form {
+    padding: 1.5rem;
+  }
+
+  .feedback-header h1 {
+    font-size: 1.25rem;
+  }
+}

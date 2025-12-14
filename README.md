@@ -1,117 +1,101 @@
-# Certificate Generator
+# Certificate Mailing System
 
-A Python-based tool to automatically generate personalized certificates from an Excel participant list and send them via email. Perfect for events, workshops, hackathons, and conferences.
+A modern web application for automating personalized certificate generation and distribution with feedback collection. Perfect for managing events, workshops, hackathons, and conferences.
 
-## Features
+## Overview
 
-- **Bulk Certificate Generation**: Process multiple participants from an Excel file
-- **Dual Format Output**: Generate both PNG images and print-ready PDF certificates
-- **Email Integration**: Automatically send certificates via Gmail SMTP
-- **Font Management**: Downloads Google Fonts automatically with system font fallbacks
-- **Template-Based**: Uses a customizable certificate template image
-- **Error Handling**: Robust error handling with detailed logging
-- **Debug Mode**: Test email functionality without sending real emails
+This platform streamlines the entire certificate distribution workflow - from participant management to certificate generation, email delivery, and feedback collection. Built with React and FastAPI, it provides a complete solution for event organizers.
 
-## Prerequisites
+## Key Features
 
-- Python 3.13 or higher
-- Gmail account with App Password (for email sending)
-- Excel file with participant data (Name and Email columns)
-- Certificate template image (PNG format)
+### Certificate Management
+- **Custom Design Editor**: Visual certificate designer with real-time preview
+- **Dynamic Text Placement**: Customize name position, font, size, and color
+- **Template Upload**: Support for custom certificate backgrounds
+- **Bulk Generation**: Process multiple participants automatically
 
-## Installation
+### Participant Management
+- **Excel Import**: Upload participant lists via Excel files
+- **Status Tracking**: Monitor email delivery and feedback status for each participant
+- **Bulk Operations**: Send certificates to all participants or resend to specific ones
+- **Individual Actions**: Resend certificates or feedback requests per participant
 
-1. Clone or download this repository
-2. Install dependencies:
-   ```bash
-   pip install pandas pillow reportlab python-dotenv
-   ```
+### Email System
+- **Dual Email Templates**: Separate templates for feedback requests and certificate delivery
+- **Gmail Integration**: Send emails through your Gmail account with app password
+- **Email Testing**: Test your email configuration before bulk sending
+- **Customizable Content**: Edit subject lines and email body for both feedback and certificate emails
 
-## Setup
+### Feedback Collection
+- **Online Forms**: Participants submit feedback through web forms
+- **Real-time Updates**: Track submission status in the dashboard
+- **Feedback Management**: View and analyze participant responses
+- **Optional Mode**: Choose to send certificates with or without feedback requests
 
-1. **Environment Variables**: Copy `.env.example` to `.env` and fill in your Gmail credentials:
-   ```bash
-   SENDER_EMAIL="your_email@gmail.com"
-   GMAIL_APP_PASSWORD="your_gmail_app_password"
-   ```
+### Admin Dashboard
+- **User Management**: View all registered users and their activity
+- **Platform Statistics**: Total users, events, certificates sent, and feedback received
+- **User Analytics**: Per-user event count and certificate metrics
+- **Account Management**: Delete user accounts (preserves admin accounts)
 
-2. **Participant Data**: Place your Excel file (`participants.xlsx`) in the `participants/` directory with columns:
-   - `Name`: Participant's full name
-   - `Email`: Participant's email address
+## Technology Stack
 
-3. **Certificate Template**: Place your template image (`certificate_template.png`) in the `template/` directory
+### Frontend
+- React 18 with TypeScript
+- Framer Motion for animations
+- React Router for navigation
+- Lucide React for icons
 
-## Usage
+### Backend
+- FastAPI (Python)
+- MongoDB with Motor (async driver)
+- Pillow for image processing
+- JWT authentication
 
-Run the certificate generator:
-```bash
-python certficates.py
-```
+## User Roles
 
-For testing without sending emails, modify the script to set `USE_DEBUG_SMTP = True` (requires a local SMTP server like MailHog).
+### Regular User
+- Create and manage events
+- Upload participant lists
+- Design certificates
+- Send certificates and feedback requests
+- View participant status and feedback
+- Configure email settings
 
-## Configuration
+### Admin User
+- All regular user capabilities
+- Access admin dashboard
+- View platform statistics
+- Manage user accounts
+- Monitor system-wide activity
 
-### Font Settings
-The script automatically downloads Google Fonts. You can change the preferred font in the script:
-```python
-PREFERRED_FONT = "Playfair Display"  # Options: Playfair Display, Cinzel, Great Vibes, Cormorant Garamond
-```
+## Workflow
 
-### Positioning
-Adjust text position and size in the script:
-```python
-TEXT_Y_POSITION = 475  # Vertical position of the name
-FONT_SIZE = 60         # Font size
-TEXT_COLOR = "black"   # Text color
-```
+1. **Event Setup**: Create an event and upload participant Excel file
+2. **Certificate Design**: Customize certificate template, fonts, and text placement
+3. **Email Configuration**: Set up Gmail credentials and customize email templates
+4. **Feedback Setup** (Optional): Enable feedback collection and customize the feedback email
+5. **Preview & Test**: Preview certificates and test email configuration
+6. **Send**: Distribute certificates and/or feedback requests to participants
+7. **Monitor**: Track delivery status and feedback submissions
+8. **Analyze**: Review feedback responses from participants
 
-### Output Directories
-Certificates are saved in:
-- `certificates_png/`: PNG format certificates
-- `certificates_pdf/`: PDF format certificates
+## Security Features
 
-## Dependencies
+- JWT-based authentication
+- Password hashing with bcrypt
+- Secure admin routes
+- Email validation
+- MongoDB injection protection
+- Environment variable configuration
 
-- `pandas`: Excel file processing
-- `pillow`: Image manipulation
-- `reportlab`: PDF generation
-- `python-dotenv`: Environment variable management
+## Database Collections
 
-## Project Structure
+- **users**: User accounts and authentication
+- **events**: Event information and settings
+- **participants**: Participant data and status tracking
+- **feedback**: Participant feedback responses
 
-```
-Certificate_Gen/
-├── certficates.py          # Main certificate generation script
-├── main.py                 # Basic entry point (placeholder)
-├── pyproject.toml          # Project configuration
-├── .env.example            # Environment variables template
-├── participants/           # Participant data directory
-│   └── participants.xlsx   # Excel file with participant list
-├── template/               # Template directory
-│   └── certificate_template.png  # Certificate template image
-├── certificates_png/       # Generated PNG certificates
-├── certificates_pdf/       # Generated PDF certificates
-└── fonts/                  # Downloaded Google Fonts
-```
+---
 
-## Gmail Setup
-
-1. Enable 2-Factor Authentication on your Gmail account
-2. Generate an App Password: https://support.google.com/accounts/answer/185833
-3. Use the App Password in your `.env` file (not your regular password)
-
-## Troubleshooting
-
-- **Font Issues**: The script falls back to system fonts if Google Fonts can't be downloaded
-- **Email Errors**: Verify your Gmail credentials and App Password
-- **Template Not Found**: Ensure the template image is in PNG format in the `template/` directory
-- **Excel Errors**: Check that your Excel file has 'Name' and 'Email' columns
-
-## License
-
-This project is open source. Feel free to modify and distribute.
-
-## Contributing
-
-Contributions are welcome! Please feel free to submit pull requests or open issues for bugs and feature requests.
+**Built for event organizers who need a reliable, automated certificate distribution system.**
