@@ -121,7 +121,7 @@ async def send_certificates(
                 )
                 
                 # Send feedback link email
-                feedback_url = f"{frontend_url}/feedback?token={token}"
+                feedback_url = f"{frontend_url}/feedback/{token}"
                 
                 # Get custom feedback email template or use default
                 feedback_subject = event.get('feedback_email_subject', f"Complete Feedback to Receive Your Certificate - {event['name']}")
@@ -319,9 +319,10 @@ async def download_results(
 @router.get("/{event_id}/feedback/download")
 async def download_feedback(
     event_id: str,
+    anonymous: bool = False,
     current_user: dict = Depends(get_current_user)
 ):
-    """Download feedback responses as CSV"""
+    """Download feedback responses as CSV (optionally anonymous)"""
     from fastapi.responses import StreamingResponse
     
     events = get_collection("events")
@@ -343,23 +344,33 @@ async def download_feedback(
     writer = csv.writer(output)
     
     # Header
-    header = ["Name", "Email", "Submitted At"]
+    if anonymous:
+        header = ["Response #", "Submitted At"]
+    else:
+        header = ["Name", "Email", "Submitted At"]
+    
     for q in questions:
         header.append(q.get("question", "Question"))
     writer.writerow(header)
     
     # Data
     cursor = feedback_col.find({"event_id": event_id, "submitted_at": {"$ne": None}})
+    response_num = 1
     async for fb in cursor:
-        participant = await participants.find_one({"_id": ObjectId(fb["participant_id"])})
-        if not participant:
-            continue
-        
-        row = [
-            participant["name"],
-            participant["email"],
-            fb.get("submitted_at", "")
-        ]
+        if anonymous:
+            row = [
+                f"Response {response_num}",
+                fb.get("submitted_at", "")
+            ]
+        else:
+            participant = await participants.find_one({"_id": ObjectId(fb["participant_id"])})
+            if not participant:
+                continue
+            row = [
+                participant["name"],
+                participant["email"],
+                fb.get("submitted_at", "")
+            ]
         
         # Map answers to questions
         answers_map = {a["question_id"]: a["answer"] for a in fb.get("answers", [])}
@@ -367,11 +378,14 @@ async def download_feedback(
             row.append(answers_map.get(q["id"], ""))
         
         writer.writerow(row)
+        response_num += 1
     
     output.seek(0)
+    
+    filename = f"feedback_{'anonymous_' if anonymous else ''}{event_id}.csv"
     
     return StreamingResponse(
         iter([output.getvalue()]),
         media_type="text/csv",
-        headers={"Content-Disposition": f"attachment; filename=feedback_{event_id}.csv"}
+        headers={"Content-Disposition": f"attachment; filename={filename}"}
     )

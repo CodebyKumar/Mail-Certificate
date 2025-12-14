@@ -74,6 +74,8 @@ interface FeedbackQuestion {
   type: 'text' | 'rating' | 'choice';
   options?: string[];
   required: boolean;
+  rating_min?: number;
+  rating_max?: number;
 }
 
 export default function Events() {
@@ -400,14 +402,32 @@ export default function Events() {
         id: Date.now().toString(),
         question: '',
         type: 'text',
-        required: true
+        required: true,
+        rating_min: 1,
+        rating_max: 5,
+        options: []
       }
     ]);
   };
 
   const updateFeedbackQuestion = (id: string, updates: Partial<FeedbackQuestion>) => {
     setFeedbackQuestions(questions =>
-      questions.map(q => q.id === id ? { ...q, ...updates } : q)
+      questions.map(q => {
+        if (q.id === id) {
+          const updated = { ...q, ...updates };
+          // Initialize options array for multiple choice if needed
+          if (updated.type === 'choice' && !updated.options) {
+            updated.options = [''];
+          }
+          // Set default rating range if needed
+          if (updated.type === 'rating' && !updated.rating_min) {
+            updated.rating_min = 1;
+            updated.rating_max = 5;
+          }
+          return updated;
+        }
+        return q;
+      })
     );
   };
 
@@ -713,7 +733,7 @@ export default function Events() {
                             onChange={e => updateFeedbackQuestion(q.id, { type: e.target.value as any })}
                           >
                             <option value="text">Text Answer</option>
-                            <option value="rating">Rating (1-5)</option>
+                            <option value="rating">Rating</option>
                             <option value="choice">Multiple Choice</option>
                           </select>
                           <label>
@@ -725,6 +745,76 @@ export default function Events() {
                             Required
                           </label>
                         </div>
+
+                        {q.type === 'rating' && (
+                          <div className="rating-config">
+                            <label>
+                              Min:
+                              <input
+                                type="number"
+                                min="1"
+                                max="10"
+                                value={q.rating_min || 1}
+                                onChange={e => updateFeedbackQuestion(q.id, { rating_min: parseInt(e.target.value) })}
+                                style={{ width: '60px', marginLeft: '8px' }}
+                              />
+                            </label>
+                            <label style={{ marginLeft: '16px' }}>
+                              Max:
+                              <input
+                                type="number"
+                                min="1"
+                                max="10"
+                                value={q.rating_max || 5}
+                                onChange={e => updateFeedbackQuestion(q.id, { rating_max: parseInt(e.target.value) })}
+                                style={{ width: '60px', marginLeft: '8px' }}
+                              />
+                            </label>
+                          </div>
+                        )}
+
+                        {q.type === 'choice' && (
+                          <div className="choice-config">
+                            <label style={{ fontSize: '0.9rem', marginBottom: '8px', display: 'block' }}>Options:</label>
+                            {(q.options || ['']).map((option, optionIndex) => (
+                              <div key={optionIndex} style={{ display: 'flex', gap: '8px', marginBottom: '8px' }}>
+                                <input
+                                  type="text"
+                                  placeholder={`Option ${optionIndex + 1}`}
+                                  value={option}
+                                  onChange={e => {
+                                    const newOptions = [...(q.options || [''])];
+                                    newOptions[optionIndex] = e.target.value;
+                                    updateFeedbackQuestion(q.id, { options: newOptions });
+                                  }}
+                                  style={{ flex: 1 }}
+                                />
+                                {(q.options || []).length > 1 && (
+                                  <button
+                                    type="button"
+                                    onClick={() => {
+                                      const newOptions = (q.options || ['']).filter((_, i) => i !== optionIndex);
+                                      updateFeedbackQuestion(q.id, { options: newOptions });
+                                    }}
+                                    style={{ padding: '4px 8px' }}
+                                  >
+                                    <X size={16} />
+                                  </button>
+                                )}
+                              </div>
+                            ))}
+                            <button
+                              type="button"
+                              onClick={() => {
+                                const newOptions = [...(q.options || ['']), ''];
+                                updateFeedbackQuestion(q.id, { options: newOptions });
+                              }}
+                              style={{ fontSize: '0.85rem', padding: '4px 12px' }}
+                            >
+                              <Plus size={14} /> Add Option
+                            </button>
+                          </div>
+                        )}
                       </div>
                     ))}
 

@@ -11,6 +11,8 @@ interface FeedbackQuestion {
   type: 'text' | 'rating' | 'multiple_choice';
   options?: string[];
   required: boolean;
+  rating_min?: number;
+  rating_max?: number;
 }
 
 interface FeedbackData {
@@ -167,14 +169,19 @@ function FeedbackForm() {
 
               {question.type === 'rating' && (
                 <div className="rating-input">
-                  {[1, 2, 3, 4, 5].map(num => (
+                  {Array.from(
+                    { length: (question.rating_max || 5) - (question.rating_min || 1) + 1 },
+                    (_, i) => (question.rating_min || 1) + i
+                  ).map(num => (
                     <button
                       key={num}
                       type="button"
                       className={`rating-star ${(answers[question.id] as number) >= num ? 'active' : ''}`}
                       onClick={() => setAnswer(question.id, num)}
+                      title={`${num} star${num > 1 ? 's' : ''}`}
                     >
                       <Star size={32} fill={(answers[question.id] as number) >= num ? 'currentColor' : 'none'} />
+                      <span className="rating-number">{num}</span>
                     </button>
                   ))}
                 </div>

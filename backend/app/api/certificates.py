@@ -208,7 +208,7 @@ async def generate_certificates(request: GenerateRequest):
                 }
                 
                 # Send feedback link email
-                feedback_url = f"{frontend_url}/feedback?token={token}"
+                feedback_url = f"{frontend_url}/feedback/{token}"
                 feedback_email_body = f"""Dear {name},
 
 Thank you for your participation! 

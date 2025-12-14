@@ -16,7 +16,7 @@ import {
   X,
   Filter
 } from 'lucide-react';
-import { participantsApi, eventsApi } from '../api';
+import { participantsApi, eventsApi, sendApi } from '../api';
 import './Participants.css';
 
 interface Participant {
@@ -134,6 +134,28 @@ export default function Participants() {
     URL.revokeObjectURL(url);
   };
 
+  const exportFeedback = async (anonymous: boolean = false) => {
+    try {
+      console.log('Exporting feedback for event:', eventId, 'anonymous:', anonymous);
+      const response = await sendApi.downloadFeedback(eventId!, anonymous);
+      console.log('Response received:', response);
+      
+      const blob = new Blob([response.data], { type: 'text/csv' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `feedback_${anonymous ? 'anonymous_' : ''}${event?.name || eventId}.csv`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    } catch (err: any) {
+      console.error('Failed to export feedback:', err);
+      const errorMsg = err.response?.data?.detail || err.message || 'Failed to export feedback';
+      alert(`Error: ${errorMsg}`);
+    }
+  };
+
   const filteredParticipants = participants.filter(p => {
     const matchesSearch = 
       p.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -196,6 +218,17 @@ export default function Participants() {
           <p>{event?.name}</p>
         </div>
         <div className="header-actions">
+          {event?.feedback_enabled && (
+            <motion.button
+              className="btn-secondary"
+              whileHover={{ scale: 1.02 }}
+              onClick={() => exportFeedback(true)}
+              title="Export anonymous feedback (no names/emails)"
+            >
+              <FileSpreadsheet size={18} />
+              Export Feedback
+            </motion.button>
+          )}
           <motion.button
             className="btn-secondary"
             whileHover={{ scale: 1.02 }}
@@ -203,7 +236,7 @@ export default function Participants() {
             disabled={participants.length === 0}
           >
             <Download size={18} />
-            Export
+            Export Participants
           </motion.button>
           <motion.button
             className="btn-primary"

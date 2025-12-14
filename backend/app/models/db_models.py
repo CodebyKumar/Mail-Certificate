@@ -84,6 +84,8 @@ class FeedbackQuestion(BaseModel):
     type: str = "text"  # text, rating, multiple_choice
     options: Optional[List[str]] = None
     required: bool = False
+    rating_min: int = 1
+    rating_max: int = 5
 
 
 class EventCreate(BaseModel):

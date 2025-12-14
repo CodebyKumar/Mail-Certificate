@@ -10,6 +10,14 @@ const api = axios.create({
   },
 });
 
+// Create public axios instance without auth interceptors
+const publicApi = axios.create({
+  baseURL: API_URL,
+  headers: {
+    'Content-Type': 'application/json',
+  },
+});
+
 // Request interceptor - add auth token
 api.interceptors.request.use(
   (config) => {
@@ -105,6 +113,12 @@ export const sendApi = {
   
   getResults: (eventId: string) =>
     api.get(`/api/events/${eventId}/results`),
+  
+  downloadFeedback: (eventId: string, anonymous: boolean = false) =>
+    api.get(`/api/events/${eventId}/feedback/download`, {
+      params: { anonymous },
+      responseType: 'blob'
+    }),
 };
 
 // Admin API
@@ -118,10 +132,10 @@ export const adminApi = {
 
 // Feedback API (public - no auth required)
 export const feedbackApi = {
-  getForm: (token: string) => api.get(`/api/feedback/${token}`),
+  getForm: (token: string) => publicApi.get(`/api/feedback/${token}`),
   
   submit: (token: string, answers: any[]) =>
-    api.post(`/api/feedback/${token}`, { answers }),
+    publicApi.post(`/api/feedback/${token}/submit`, { answers }),
 };
 
 export default api;

@@ -26,11 +26,14 @@ createRoot(document.getElementById('root')!).render(
     <BrowserRouter>
       <AuthProvider>
         <Routes>
-          {/* Public routes */}
+          {/* Public routes - must be first to avoid catch-all */}
           <Route path="/login" element={<AuthPage />} />
           <Route path="/register" element={<AuthPage />} />
           <Route path="/admin/login" element={<AdminLoginPage />} />
           <Route path="/feedback/:token" element={<FeedbackForm />} />
+          
+          {/* Redirect root to dashboard or login */}
+          <Route path="/" element={<Navigate to="/dashboard" replace />} />
           
           {/* Protected routes */}
           <Route element={<ProtectedRoute />}>
@@ -51,9 +54,6 @@ createRoot(document.getElementById('root')!).render(
               <Route path="/admin" element={<Admin />} />
             </Route>
           </Route>
-          
-          {/* Redirect root to dashboard or login */}
-          <Route path="/" element={<Navigate to="/dashboard" replace />} />
           
           {/* Catch all - redirect to dashboard */}
           <Route path="*" element={<Navigate to="/dashboard" replace />} />
