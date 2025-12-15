@@ -67,7 +67,7 @@ async def send_certificates(
         query["status"] = "pending"  # Only pending
     
     logger.info(f"Send query: {query}")
-    logger.info(f"Event feedback_enabled: {event.get('feedback_enabled', True)}")
+    logger.info(f"Event feedback_enabled: {event.get('feedback_enabled', False)}")
     
     cursor = participants.find(query)
     
@@ -86,10 +86,10 @@ async def send_certificates(
         name = participant["name"]
         email = participant["email"]
         
-        logger.info(f"Processing participant: {name} ({email}), feedback_enabled={event.get('feedback_enabled', True)}")
+        logger.info(f"Processing participant: {name} ({email}), feedback_enabled={event.get('feedback_enabled', False)}")
         
         try:
-            if event.get("feedback_enabled", True):
+            if event.get("feedback_enabled", False):
                 # Generate feedback token and send feedback link
                 token = secrets.token_urlsafe(32)
                 
@@ -184,7 +184,8 @@ async def send_certificates(
                     sender_email,
                     app_password,
                     event.get("email_subject", "Your Participation Certificate"),
-                    event.get("email_body", "Congratulations!")
+                    event.get("email_body", "Congratulations!"),
+                    event.get("name", "")
                 )
                 
                 await participants.update_one(
@@ -260,7 +261,7 @@ async def get_results(
     
     return {
         "event_name": event["name"],
-        "feedback_enabled": event.get("feedback_enabled", True),
+        "feedback_enabled": event.get("feedback_enabled", False),
         "statistics": {
             "total": total,
             "pending": pending,

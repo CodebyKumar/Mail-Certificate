@@ -149,7 +149,8 @@ async def submit_feedback(token: str, submission: FeedbackSubmission):
             sender_email,
             app_password,
             event.get("email_subject", "Your Participation Certificate"),
-            event.get("email_body", "Congratulations!")
+            event.get("email_body", "Congratulations!"),
+            event.get("name", "")
         )
         
         # Update participant as certificate sent

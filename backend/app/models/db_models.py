@@ -99,7 +99,7 @@ class EventUpdate(BaseModel):
     name: Optional[str] = None
     description: Optional[str] = None
     text_settings: Optional[TextSettings] = None
-    feedback_enabled: bool = True
+    feedback_enabled: bool = False
     feedback_questions: Optional[List[FeedbackQuestion]] = None
     email_subject: Optional[str] = None
     email_body: Optional[str] = None
@@ -118,7 +118,7 @@ class EventInDB(BaseModel):
     template_width: Optional[int] = None
     template_height: Optional[int] = None
     text_settings: TextSettings = Field(default_factory=TextSettings)
-    feedback_enabled: bool = True
+    feedback_enabled: bool = False
     feedback_questions: List[FeedbackQuestion] = []
     email_subject: str = "Your Participation Certificate"
     email_body: str = "Dear {name},\n\nCongratulations! Please find attached your participation certificate.\n\nBest regards"

@@ -25,6 +25,8 @@ class Settings(BaseSettings):
     # MongoDB
     MONGODB_URL: str = "mongodb://localhost:27017"
     DATABASE_NAME: str = "certmailer"
+    # Allow skipping DB connection on startup (useful for local preview without Atlas)
+    SKIP_DB_ON_STARTUP: bool = False
     
     # JWT Authentication
     JWT_SECRET: str = "change-this-secret-key-in-production"

@@ -73,17 +73,20 @@ class CertificateService:
         sender_email: str,
         app_password: str,
         subject: str = "Your Participation Certificate",
-        body: str = "Congratulations! Please find attached your participation certificate."
+        body: str = "Congratulations! Please find attached your participation certificate.",
+        event_name: str = ""
     ) -> None:
         """Send certificate via email"""
         
         msg = EmailMessage()
-        msg["Subject"] = subject
+        
+        # Replace {name} and {event_name} placeholders in subject and body
+        email_subject = subject.replace("{name}", name).replace("{event_name}", event_name)
+        email_body = body.replace("{name}", name).replace("{event_name}", event_name)
+        
+        msg["Subject"] = email_subject
         msg["From"] = sender_email
         msg["To"] = email
-        
-        # Replace {name} placeholder in body if present
-        email_body = body.replace("{name}", name)
         
         # Use complete user-provided content without adding extra text
         msg.set_content(email_body)

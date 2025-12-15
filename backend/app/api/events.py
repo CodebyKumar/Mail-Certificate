@@ -58,7 +58,7 @@ async def list_events(current_user: dict = Depends(get_current_user)):
             description=event.get("description"),
             has_template=event.get("template_path") is not None,
             text_settings=TextSettings(**event.get("text_settings", {})),
-            feedback_enabled=event.get("feedback_enabled", True),
+            feedback_enabled=event.get("feedback_enabled", False),
             feedback_questions=[FeedbackQuestion(**q) for q in event.get("feedback_questions", [])],
             email_subject=event.get("email_subject", "Your Participation Certificate"),
             email_body=event.get("email_body", ""),
@@ -95,7 +95,7 @@ async def create_event(
             "font_size": 60,
             "text_color": "#000000"
         },
-        "feedback_enabled": True,
+        "feedback_enabled": False,
         "feedback_questions": [
             {"id": "1", "question": "How would you rate the overall event?", "type": "rating", "required": True},
             {"id": "2", "question": "What did you like most about the event?", "type": "text", "required": False}
@@ -116,7 +116,7 @@ async def create_event(
         description=event_data.description,
         has_template=False,
         text_settings=TextSettings(**event_doc["text_settings"]),
-        feedback_enabled=True,
+        feedback_enabled=False,
         feedback_questions=[FeedbackQuestion(**q) for q in event_doc["feedback_questions"]],
         email_subject=event_doc["email_subject"],
         email_body=event_doc["email_body"],
@@ -153,7 +153,7 @@ async def get_event(
         description=event.get("description"),
         has_template=event.get("template_path") is not None,
         text_settings=TextSettings(**event.get("text_settings", {})),
-        feedback_enabled=event.get("feedback_enabled", True),
+        feedback_enabled=event.get("feedback_enabled", False),
         feedback_questions=[FeedbackQuestion(**q) for q in event.get("feedback_questions", [])],
         email_subject=event.get("email_subject", "Your Participation Certificate"),
         email_body=event.get("email_body", ""),

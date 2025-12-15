@@ -16,7 +16,11 @@ from app.api import certificates  # Keep legacy endpoints for backward compatibi
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """Application lifespan - connect/disconnect database"""
-    await connect_to_mongo()
+    try:
+        await connect_to_mongo()
+    except Exception as e:
+        print(f"Warning: Failed to connect to MongoDB during startup: {e}")
+        print("Application will continue without database connection")
     yield
     await close_mongo_connection()
 
@@ -68,7 +72,10 @@ async def root():
 @app.get("/health")
 async def health_check():
     """Health check endpoint"""
-    return {"status": "healthy"}
+    # Include DB status for easier debugging
+    from app.core.database import db
+    db_status = db.db is not None
+    return {"status": "healthy", "db_connected": db_status}
 
 
 # For deployment
